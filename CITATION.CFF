@@ -1,0 +1,43 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: 'BAMMir Open Grip Force '
+message: >-
+  If you use this dataset, please cite it using the metadata
+  from this file.
+type: dataset
+authors:
+  - given-names: Sabine Melanie
+    family-names: Räuber
+    email: sabine.raeuber@unibas.ch
+    affiliation: University of Basel
+    orcid: 'https://orcid.org/0009-0003-5852-1490'
+  - given-names: 'Francesco '
+    family-names: Santini
+    orcid: 'https://orcid.org/0000-0001-6984-4816'
+    affiliation: University of Basel
+repository-code: 'https://github.com/BAMMri/Open-Grip-Force'
+abstract: >-
+  Synchronising dynamic MRI acquisitions with physical force
+  measurements enables standardised and normalised
+  assessment of muscle activity but requires ad hoc sensors
+  compatible with the MR environment. We aimed to develop an
+  open-source, MRI-compatible grip force sensor for dynamic
+  Muscle MRI. Phantom measurements with and without the
+  sensor, with dynamic and anatomical scans, were performed
+  at a 3T MRI to assess sensor compatibility, impact on
+  field homogeneity and SNR potential. The grip force sensor
+  maintained functionality with an additional low-pass
+  filter installed in the waveguide. The SNR decreased
+  slightly by 3.7% during the scans. The low-cost,
+  open-source grip force sensor demonstrated excellent MRI
+  compatibility and therefore appears to be suitable for use
+  with dynamic muscle MRI methods to characterise forearm
+  flexors, with potential applications in the study of
+  myotonic dystrophy.
+keywords:
+  - MRI
+license: GPL-3.0
+version: 0.1.0
+date-released: '2025-02-04'
