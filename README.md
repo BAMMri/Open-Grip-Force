@@ -19,9 +19,10 @@ Open-Grip-Force/
 │   ├── ForceMeasurements/
 │   ├── MRIMeasurements/
 │── documents/
-│   ├── GUI and assembly instructions (linked above)
-│── scripts/
-│   ├── Arduino code for NMES & Trigger extension (linked above)
+│   ├── Assembly instructions (linked above)
+│── code/
+│   ├── Arduino code for NMES & Trigger extension (source linked above)
+│   ├── GUI (source linked above)
 ```
 ## 📜 License
 This work is licensed under a [Creative Commons Attribution 3.0 International License](https://creativecommons.org/licenses/by/3.0/).
