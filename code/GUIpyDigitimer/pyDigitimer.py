@@ -2,12 +2,13 @@ import sys
 import glob
 import serial
 import re
-
-import PyQt4
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-from pyDigitimer_ui import Ui_PyDigitimerWidget
 import time
+
+
+from PyQt5.QtWidgets import *  # CHANGE: Explicitly import QtWidgets
+from PyQt5.QtWidgets import QApplication
+from pyDigitimer_ui import Ui_PyDigitimerWidget
+
 
 BAUD = 9600
 #SERIAL_PORT = '/dev/ttyUSB0'
@@ -44,10 +45,14 @@ def serial_ports():
             pass
     return result
 
-class PyDigitimer(Ui_PyDigitimerWidget, QWidget):
+class PyDigitimer(QWidget, Ui_PyDigitimerWidget): # CHANGE
     
     def __init__(self, parent = None):
-        QWidget.__init__(self, parent)
+        """
+        Args:
+            parent: The parent widget to which this object will be added
+        """
+        super().__init__(parent)  # # CHANGE
         self.setupUi(self)
         ports = serial_ports()
         self.comportCombo.addItems(ports)
@@ -62,16 +67,19 @@ class PyDigitimer(Ui_PyDigitimerWidget, QWidget):
         self.offTime = 0
         
     def readStatus(self):
+        """
+        Reads status from the device via serial communication and updates the frequency, on time, and off time values accordingly.
+        """
         time.sleep(0.5)
-        self.serial.flushInput()
-        self.serial.write("?\n")
+        self.serial.reset_input_buffer() # CHANGE
+        self.serial.write(b"?\n") # CHANGE
         time.sleep(0.1)
-        while self.serial.inWaiting():
-            statusLine = self.serial.readline()
-            print statusLine
-        m = re.match(r'Status: (\d+),(\d+),(\d+)', statusLine)
+        while self.serial.in_waiting:
+            statusLine = self.serial.readline().decode().strip()
+            print (statusLine)
+        m = re.match(r'Status: (\d+),(\d+),(\d+)', statusLine) #maybe (r'Status: (\d+),(\d+),(\d+)', statusLine)?
         if m is None:
-            QMessageBox.warning(self, "Error", "Error parsing status", QMessageBox.Ok)
+            QMessageBox.warning(self, "Error", "Error parsing status", QMessageBox.StandardButton.Ok) #change
             return
         
         self.freq = int(m.group(1))
@@ -93,10 +101,20 @@ class PyDigitimer(Ui_PyDigitimerWidget, QWidget):
                 self.setButton.setStyleSheet("background-color: #CC9999")
             
     def serialConnect(self):
+        """
+        Connects to a serial port.
+
+        Parameters:
+        None
+
+        Returns:
+        None
+        """
         if self.serial is not None:
             # we are already connected
-            ans = QMessageBox.warning(self, "Disconnect", "Are you sure you want to disconnect?", QMessageBox.Yes | QMessageBox.No)
-            if ans == QMessageBox.Yes:
+            ans = QMessageBox.warning(self, "Disconnect", "Are you sure you want to disconnect?",
+                                      QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)  # CHANGE
+            if ans == QMessageBox.StandardButton.Yes: #Change
                 self.serialDisconnect()
             return
         try:
@@ -118,19 +136,36 @@ class PyDigitimer(Ui_PyDigitimerWidget, QWidget):
         self.settingsBox.setEnabled(False)
         
     def writeSettings(self):
-        self.serial.flushInput()
+        """
+
+        Writes the current settings to the serial port.
+
+        The following settings are used:
+        - Frequency: The current frequency value from freqSpin
+        - On Time: The current on time value from onSpin
+        - Off Time: The current off time value from offSpin
+
+        An output string is created by formatting the settings values separated by commas.
+        The output string is then written to the serial port followed by a newline character.
+
+        After writing, the method prints the output string and reads a response from the serial port, decoding and stripping the output.
+        Finally, the setButton style sheet is set to an empty string.
+
+        """
+        self.serial.reset_input_buffer()  # CHANGE
         self.freq = self.freqSpin.value()
         self.onTime = self.onSpin.value()
         self.offTime = self.offSpin.value()
-        outStr = "%d,%d,%d" % (self.freq, self.onTime, self.offTime)
-        print "Writing: ", outStr
-        self.serial.write(outStr + "\n")
-        print self.serial.readline()
+        outStr = f"{self.freq},{self.onTime},{self.offTime}"  # CHANGE: Use f-string formatting
+        print("Writing:", outStr)  # CHANGE: Fix print statement
+        self.serial.write((outStr + "\n").encode())  # CHANGE: Encode string before writing
+        print(self.serial.readline().decode().strip())  # CHANGE: Decode readline() output
         self.setButton.setStyleSheet("")
         
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    app.setStyle("Fusion")
     window = PyDigitimer()
     window.show()
     window.setFixedSize(window.size())
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
