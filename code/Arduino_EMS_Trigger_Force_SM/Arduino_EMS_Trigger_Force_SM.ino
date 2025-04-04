@@ -293,7 +293,7 @@ void loop() {
   if (scale.is_ready())
   {
     Serial.print("Force: ");
-    float val = 0; //scale.get_units(); 
+    float val = scale.get_units(); 
     Serial.println(val, 1);
     
     #ifdef DISPLAY
