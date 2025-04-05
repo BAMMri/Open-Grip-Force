@@ -1,4 +1,6 @@
 # Open Grip Force Sensor for MRI
+![Overall Setup Sketch](https://github.com/user-attachments/assets/a20871da-3e3f-44a9-bfcd-cd7ec801199c)
+
 
 ## 🚧 This project is currently under development🚧  
 
