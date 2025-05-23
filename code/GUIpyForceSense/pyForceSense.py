@@ -167,7 +167,7 @@ class PyForceSense(Ui_PyForceSenseWidget, QWidget):
     def processSerial(self, serialString):
         m = forceStringPattern.match(serialString)
         if m is not None:
-            self.curForce = float(m.group(1))
+            self.curForce = float(m.group(1)) * 9.80665
             if self.curForce > self.maxForce: self.maxForce = self.curForce
             if self.logFile:
                 timestamp = time.time()
